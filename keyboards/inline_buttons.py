@@ -9,8 +9,14 @@ async def start_keyboard():
         "Начать опросник",
         callback_data="start_questionnaire"
     )
+    form_start_button = InlineKeyboardButton(
+        "Registration",
+        callback_data="fsm_start_form"
+    )
     makrup.add(
         questionnaire_button
+    ).add(
+        form_start_button
     )
     return makrup
 
@@ -30,6 +36,8 @@ async def question_first_keyboard():
         female_button
     )
     return makrup
+
+
 
 # async def city_question_keyboard():
 #     makrup = InlineKeyboardMarkup()
@@ -78,3 +86,15 @@ async def question_first_keyboard():
 #     )
 
     # return makrup
+
+async def my_profile_keyboard():
+    markup = InlineKeyboardMarkup()
+    profile_button = InlineKeyboardButton(
+        "My Profile",
+        callback_data="my_profile"
+    )
+
+    markup.add(
+        profile_button
+    )
+    return markup
