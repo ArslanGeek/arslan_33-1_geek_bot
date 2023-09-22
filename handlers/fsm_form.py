@@ -76,7 +76,7 @@ async def load_occupation(message: types.Message,
 async def load_married(message: types.Message,
                    state: FSMContext):
     async with state.proxy() as data:
-        data['bio'] = message.text
+        data['married'] = message.text
         print(data)
     await FormStates.next()
     await message.reply(

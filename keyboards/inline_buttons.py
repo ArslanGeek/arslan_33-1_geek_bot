@@ -39,6 +39,10 @@ async def question_first_keyboard():
 
 
 
+
+
+
+
 # async def city_question_keyboard():
 #     makrup = InlineKeyboardMarkup()
 #     bishkek_button = InlineKeyboardButton(
