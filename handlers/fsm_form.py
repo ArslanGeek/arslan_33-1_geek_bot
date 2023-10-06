@@ -15,11 +15,30 @@ class FormStates(StatesGroup):
     photo = State()
 
 async def fsm_start(call: types.CallbackQuery):
+    user = Database().sql_select_user_form_command(
+        telegram_id=call.from_user.id
+    )
+    print(user)
+    if user:
+        await bot.send_message(
+            chat_id=call.message.chat.id,
+            text="You have already been registered"
+                 "\nDo you wanna see your profile?"
+        )
+    else:
+        await bot.send_message(
+            chat_id=call.message.chat.id,
+            text="Send me your nickname"
+        )
+        await FormStates.nickname.set()
+
+async def update_start(call: types.CallbackQuery):
     await bot.send_message(
         chat_id=call.message.chat.id,
         text="Send me your nickname"
     )
     await FormStates.nickname.set()
+
 
 async def load_nickname(message: types.Message,
                         state: FSMContext):
@@ -90,15 +109,29 @@ async def load_photo(message: types.Message,
         destination_dir=DESTINATION_DIR
     )
     async with state.proxy() as data:
-        Database().sql_insert_user_form_command(
-            telegram_id=message.from_user.id,
-            nickname=data["nickname"],
-            bio=data["bio"],
-            age=data["age"],
-            occupation=data["occupation"],
-            married=data["married"],
-            photo=path.name,
+        user = Database().sql_select_user_form_command(
+            telegram_id=message.from_user.id
         )
+        if user:
+            Database().sql_update_user_form_command(
+                nickname=data["nickname"],
+                bio=data["bio"],
+                age=data["age"],
+                occupation=data["occupation"],
+                married=data["married"],
+                photo=path.name,
+                telegram_id=message.from_user.id
+            )
+        else:
+            Database().sql_insert_user_form_command(
+                telegram_id=message.from_user.id,
+                nickname=data["nickname"],
+                bio=data["bio"],
+                age=data["age"],
+                occupation=data["occupation"],
+                married=data["married"],
+                photo=path.name,
+            )
         await message.reply(text="Registered Successfully")
         await state.finish()
 def register_fsm_form_handlers(dp: Dispatcher):
@@ -116,3 +149,5 @@ def register_fsm_form_handlers(dp: Dispatcher):
                                 content_types=['text'])
     dp.register_message_handler(load_photo, state=FormStates.photo,
                                 content_types=types.ContentTypes.PHOTO)
+    dp.register_message_handler(update_start,
+                                lambda call: call.data == 'edit_profile')

@@ -1,8 +1,7 @@
 from aiogram import types, Dispatcher
-from config import bot, ADMIN_ID
 from const import START_TEXT
 from database.sql_commands import Database
-from config import bot, ADMIN_ID, BOT_PIC, ANIMATION_PIC
+from config import bot, ADMIN_ID, ANIMATION_PIC
 from keyboards.inline_buttons import start_keyboard
 
 
@@ -14,7 +13,7 @@ async def start_button(message: types.Message):
         first_name=message.from_user.first_name,
         last_name=message.from_user.last_name,
     )
-    print(message)
+    print(message.get_full_command())
     # await bot.send_message(
     #     chat_id = message.chat.id,
     #     text = START_TEXT.format(
