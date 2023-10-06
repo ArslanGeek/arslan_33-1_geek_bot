@@ -47,4 +47,6 @@ SELECT_ALL_USER_FORMS = """
 SELECT * FROM user_form
 """
 
-INSERT_LIKE_QUERY = """INSERT INTO like_user_form VALUES (?,?,?)"""
+INSERT_LIKE_QUERY = """
+INSERT INTO like_user_form VALUES (?,?,?)
+"""

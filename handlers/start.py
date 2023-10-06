@@ -7,12 +7,12 @@ from keyboards.inline_buttons import start_keyboard
 
 
 async def start_button(message: types.Message):
-    Database().sql_insert_user_command(
-        telegram_id=message.from_user.id,
-        username=message.from_user.username,
-        first_name=message.from_user.first_name,
-        last_name=message.from_user.last_name,
-    )
+    await Database().sql_insert_user_command(
+            telegram_id=message.from_user.id,
+            username=message.from_user.username,
+            first_name=message.from_user.first_name,
+            last_name=message.from_user.last_name,
+        )
     print(message.get_full_command())
     # await bot.send_message(
     #     chat_id = message.chat.id,
